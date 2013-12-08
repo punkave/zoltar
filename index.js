@@ -5,12 +5,17 @@ var exec = require('child_process').exec;
 var url = require('url');
 var basename = require('path').basename;
 var async = require('async');
+var monitor = require('express')();
+var nunjucks = require('nunjucks');
+
+nunjucks.configure('views', { autoescape: true });
 
 var home = process.env.HOME;
 var sitesPath = home + '/Sites';
 
 var sites = {};
-var nextPort = 3000;
+var nextPort = 3100;
+var count = 0;
 
 refresh();
 
@@ -21,16 +26,44 @@ fs.watch(sitesPath, { persistent: true }, function(event, filename) {
 var http = require('http');
 var httpProxy = require('http-proxy');
 
-var proxy = httpProxy.createProxyServer({});
+var proxy = httpProxy.createProxyServer({ agent: http.globalAgent });
 
-var server = require('http').createServer(function(req, res) {
+var server = require('http').createServer(dispatcher);
+
+var io = require('socket.io').listen(server);
+
+nunjucks.configure('views', {
+    autoescape: false,
+    express: monitor
+});
+
+monitor.get('/', function(req, res) {
+  return res.render('monitor.html');
+});
+
+console.log("Proxy ready. Be sure to install proxy.pac via\n" +
+  "System Preferences -> Network -> Advanced ->\n" +
+  "Proxies -> Automatic Configuration\n\n");
+server.listen(5050);
+
+function dispatcher(req, res) {
   var parsed = url.parse(req.url);
   var site = parsed.hostname;
-  if (!sites[site]) {
-    // Not one of ours - pass through
-    return proxy.web(req, res, { target: req.url });
+  var matches = site.match(/^(.*)?\.dev$/);
+  if (matches) {
+    site = matches[1];
   }
-  console.log(site + ' is one of ours');
+
+  if (site === 'monitor') {
+    return monitor(req, res);
+  }
+
+  if (!sites[site]) {
+    // Not one of ours
+    return res.send('Hmm, there is no such dev site right now. TODO: list dev sites available here. HINT: never set this up as your proxy server for ALL sites. Use the provided proxy.pac file via System Preferences -> Network -> Advanced -> Proxies -> AUtomatic Configuration.');
+  }
+
+  // Talk to the appropriate server app, start one if needed
   return async.series({
     spinup: function(callback) {
       if (sites[site].port) {
@@ -53,9 +86,11 @@ var server = require('http').createServer(function(req, res) {
       setTimeout(callback, 3000);
     },
     proxy: function(callback) {
-      console.log('proxying');
       var target = 'http://localhost:' + sites[site].port + parsed.path;
-      console.log(target);
+      var superEnd = res.end;
+      res.end = function(data, encoding) {
+        return superEnd.call(res, data, encoding);
+      };
       return proxy.web(req, res, { target: target });
     }
   }, function(err) {
@@ -64,10 +99,7 @@ var server = require('http').createServer(function(req, res) {
       return res.send('Oh dear, node-dev-proxy is having some trouble.');
     }
   });
-});
-
-console.log("Set your HTTP proxy server setting to http://localhost:5050");
-server.listen(5050);
+}
 
 function refresh()
 {

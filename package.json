@@ -16,6 +16,8 @@
     "http-proxy": "git://github.com/nodejitsu/node-http-proxy#caronte",
     "glob": "~3.2.7",
     "lodash": "~2.4.1",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "nunjucks": "~1.0.0",
+    "socket.io": "~0.9.16"
   }
 }

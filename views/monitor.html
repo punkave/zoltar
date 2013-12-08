@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <title>Running Node Sites</title>
+  <style type="text/css">
+  </style>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script></head>
+<body>
+<ul>
+  <li><a data-tab href="#" class="tab">site</a></li>
+</ul>
+<pre class="monitor" data-monitor></pre>
+<script type="text/javascript">
+setInterval(function() {
+  $.get('/update', {}, function(data) {
+    $.each(function(site, output) {
+      activate(site);
+      var $monitor = $monitors[site];
+      var monitor = $monitor[0];
+      // attr() doesn't work in Firefox for this one
+      var top = monitor.scrollTop;
+      var text = $monitor.text();
+      text += output;
+      var height = ul.height();
+      $monitors[site].text(text);
+      // attr() doesn't work in Firefox for this one
+      var content_height = ul[0].scrollHeight;
+      ul.append(data);
+      update_chat_last_id();
+      // If we were previously at the bottom, scroll down to the new bottom
+      if (top + height >= content_height)
+      {
+        ul[0].scrollTop = ul[0].scrollHeight;
+      }
+
+
+    });
+  })
+}, 20);
+
+
+</script>
+</body>
+</html>
