@@ -6,6 +6,8 @@ node-dev-proxy launches your node-powered sites on demand when you access them b
 
 node-dev-proxy also provides a simple web-based console where you can see the output of all of your apps and easily shut them down, launch more, or visit their homepages.
 
+<img src="https://raw.github.com/punkave/node-dev-proxy/master/screenshot1.png" />
+
 ## Setting up node-dev-proxy
 
 First, move your node-powered sites to `~/node-sites`. Each one should have an `app.js` file. The layout looks like this:
@@ -25,7 +27,7 @@ Now start the proxy:
 
     node app
 
-Next, configure your system to use the provided `proxy.pac` file for webserver proxy configuration. All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
+Next, **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
 
 * Go to System Preferences
 * Open "Network"
