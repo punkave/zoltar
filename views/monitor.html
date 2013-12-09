@@ -3,43 +3,185 @@
 <head>
   <meta charset="utf-8">
   <title>Running Node Sites</title>
-  <style type="text/css">
-  </style>
+  <link rel="stylesheet" type="text/css" href="/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="/css/sensible.css">
+  <link rel="stylesheet" type="text/css" href="/css/monitor.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script></head>
 <body>
-<ul>
-  <li><a data-tab href="#" class="tab">site</a></li>
-</ul>
+{# 'top' wraps everything that isn't the monitors so that we can #}
+{# calculate a size for the monitors as needed in JavaScript #}
+<div data-top>
+  <div class="monitor-tabs" data-monitor-tabs>
+    <a class="monitor-tab" data-monitor-tab href="#"><span data-name>site</span> <span class="close" data-close>x</span></a>
+  </div>
+  <div class="launchers" data-launchers>
+    <a class="launcher" data-launcher href="#">site</a>
+  </div>
+</div>
+<div data-monitors>
 <pre class="monitor" data-monitor></pre>
-<script type="text/javascript">
-setInterval(function() {
-  $.get('/update', {}, function(data) {
-    $.each(function(site, output) {
-      activate(site);
-      var $monitor = $monitors[site];
-      var monitor = $monitor[0];
-      // attr() doesn't work in Firefox for this one
-      var top = monitor.scrollTop;
-      var text = $monitor.text();
-      text += output;
-      var height = ul.height();
-      $monitors[site].text(text);
-      // attr() doesn't work in Firefox for this one
-      var content_height = ul[0].scrollHeight;
-      ul.append(data);
-      update_chat_last_id();
-      // If we were previously at the bottom, scroll down to the new bottom
-      if (top + height >= content_height)
-      {
-        ul[0].scrollTop = ul[0].scrollHeight;
+</div>
+<script>
+var $monitorTabs;
+var $monitors;
+var $monitorTabTemplate;
+var $monitorTemplate;
+var $launchers;
+var $launcherTemplate;
+
+$(function() {
+
+  $monitorTabs = $('[data-monitor-tabs]');
+  $monitors = $('[data-monitors]');
+  $monitorTabTemplate = $('[data-monitor-tab]');
+  $monitorTabTemplate.detach();
+  $monitorTemplate = $('[data-monitor]');
+  $monitorTemplate.detach();
+  $launchers = $('[data-launchers]');
+  $launcherTemplate = $('[data-launcher]');
+  $launcherTemplate.detach();
+
+  $('body').on('click', '[data-monitor-tab]', function() {
+    $('[data-monitor-tabs] [data-monitor-tab]').removeClass('current');
+    $(this).addClass('current');
+    $('[data-monitors] [data-monitor]').removeClass('current');
+    var $monitor = $('[data-monitors] [data-monitor="' + $(this).attr('data-monitor') + '"]');
+    $monitor.addClass('current');
+    // Scroll to bottom so we see something relevant
+    $monitor[0].scrollTop = $monitor[0].scrollHeight;
+    return false;
+  });
+
+  $('body').on('dblclick', '[data-monitor-tab]', function() {
+    window.open('http://' + $(this).attr('data-monitor') + '.dev', '_blank');
+    return false;
+  });
+
+  $('body').on('click', '[data-monitor-tab] [data-close]', function() {
+    var name = $(this).closest('[data-monitor-tab]').attr('data-monitor');
+    $.post('/kill', { name: name }, function(data) {
+      if (data.status === 'ok') {
+        $('[data-monitor="' + name + '"]').remove();
+      } else {
+        alert(data.status);
       }
-
-
     });
-  })
-}, 20);
+  });
 
+  $('body').on('click', '[data-launcher]', function() {
+    var name = $(this).attr('data-launcher');
+    // Let the server launch it for us on demand
+    window.open('http://' + name + '.dev', '_blank');
+    return false;
+  });
 
+  $(window).resize(function() {
+    resize();
+  });
+  resize();
+});
+
+function resize() {
+  $('[data-monitors] [data-monitor]').height($(window).height() - $('[data-top]').height() - 8);
+}
+
+// Simplest, stupidest way to update the monitor for now. Well not
+// *too* stupid...
+//
+// TODO cope with socket.io's bugs when talking to node-http-proxy
+// and vice versa
+
+setInterval(update, 200);
+
+var launchable = [];
+
+var since = 0;
+
+function update() {
+  var newLaunchable = [];
+  $.post(
+    '/update',
+    {
+      since: since
+    },
+    function(data) {
+      if (data.status !== 'ok') {
+        alert(data.status);
+        return;
+      }
+      $.each(data.sites, function(name, info) {
+        if (info.ran) {
+          var $monitor = getMonitor(name);
+          append($monitor, info.output);
+        } else {
+          newLaunchable.push(name);
+        }
+      });
+      since = Math.max(since, data.last);
+      if (JSON.stringify(launchable) !== JSON.stringify(newLaunchable)) {
+        launchable = newLaunchable;
+        $launchers.html('');
+        $.each(launchable, function(i, name) {
+          var $launcher = $launcherTemplate.clone();
+          $launcher.text(name);
+          $launcher.attr('data-launcher', name);
+          $launchers.append($launcher);
+        });
+      }
+    },
+    'json'
+  );
+}
+
+function append($el, output) {
+  // Make sure we scroll to the bottom on any new output if we were
+  // previously at the bottom
+  var el = $el[0];
+  var top = el.scrollTop;
+  var contentHeight = el.scrollHeight;
+  var height = $el.height();
+  $.each(output, function(i, m) {
+    // Cope with out of order responses gracefully. We will already
+    // have the content because we always ask for everything
+    // we don't already have
+    if (m.id < since) {
+      return;
+    }
+    $el.append($.parseHTML(m.o));
+  });
+  if (!$el.hasClass('current')) {
+    return;
+  }
+  // If we were previously near bottom, scroll down to the new bottom
+  if (top + height + 10 >= contentHeight)
+  {
+    el.scrollTop = el.scrollHeight;
+  }
+}
+
+function getMonitor(name) {
+  var $monitor = $('[data-monitors] [data-monitor="' + name + '"]');
+  var created = false;
+  if (!$monitor.length) {
+    var $monitorTab = $monitorTabTemplate.clone();
+    $monitorTab.find('[data-name]').text(name);
+    $monitorTab.attr('data-monitor', name);
+    $monitorTabs.append($monitorTab);
+    $monitor = $monitorTemplate.clone();
+    $monitor.attr('data-monitor', name);
+    $monitors.append($monitor);
+    created = true;
+  }
+  $monitorTab = $('[data-monitor-tabs] [data-monitor="' + name + '"]');
+  var $currentMonitor = $('[data-monitors] [data-monitor].current');
+  if (!$currentMonitor.length) {
+    $monitorTab.trigger('click');
+  }
+  if (created) {
+    resize();
+  }
+  return $monitor;
+}
 </script>
 </body>
 </html>
