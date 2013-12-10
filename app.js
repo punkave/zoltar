@@ -88,15 +88,43 @@ function outputSince(site, since) {
 //   }
 // });
 
+monitor.post('/restart', function(req, res) {
+  var site = sites[req.body.name];
+  return async.series({
+    kill: function(callback) {
+      return kill(site, callback);
+    },
+    launch: function(callback) {
+      send(site.name, 'system', "\n\n* * * RESTART * * *\n\n");
+      return launch(site, callback);
+    }
+  }, function(err) {
+    if (err) {
+      return res.send({ status: err });
+    } else {
+      return res.send({ status: 'ok' });
+    }
+  });
+});
+
 monitor.post('/kill', function(req, res) {
   var site = sites[req.body.name];
-  if (site.child) {
-    site.child.kill();
-    delete site.child;
-    delete site.port;
-  }
-  return res.send({ status: 'ok' });
+  return kill(site, function() {
+    return res.send({ status: 'ok' });
+  });
 });
+
+function kill(site, callback) {
+  if (!site.child) {
+    return callback(null);
+  }
+  if (site.child) {
+    site.child.on('close', function() {
+      return callback(null);
+    });
+    site.child.kill();
+  }
+}
 
 console.log("Proxy ready. Be sure to install proxy.pac via\n" +
   "System Preferences -> Network -> Advanced ->\n" +
@@ -146,6 +174,8 @@ function serveProxy(name, req, res)
       res.end = function(data, encoding) {
         return superEnd.call(res, data, encoding);
       };
+      // Workaround for https://github.com/nodejitsu/node-http-proxy/issues/529
+      req.url = req.url.replace(/^\w+\:\/\/.*?\//, '/');
       return proxy.web(req, res, { target: target });
     }
   }, function(err) {
@@ -252,16 +282,18 @@ function launch(site, callback) {
   }, function(callback) {
     var socket = net.connect({port: site.port, host: 'localhost'}, function() {
       // Connection successful
-      socket.destroy();
+      socket.end();
       connected = true;
       return callback(null);
     });
     socket.on('error', function(e) {
       tries++;
-      if (tries === 20) {
+      socket.end();
+      if (tries === 30) {
+        console.log('unable to connect to ' + site.name + ' on port ' + site.port + 'after 30 tries:');
+        console.log(e);
         return callback('failed');
       }
-      socket.destroy();
       return setTimeout(callback, 250);
     });
   }, function(err) {

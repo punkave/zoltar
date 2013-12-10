@@ -52,11 +52,19 @@ Try visiting:
 
     http://monitor.dev
 
-You can see all the console output of each site. There is an "x" to shut each site down. If you double-click the tab for a site that is already running, a new browser window is opened to visit that site. And, if you click one of the tabs at right for sites not already running, they start up and open in your browser.
+You can see all the console output of each site. There is an "x" to shut each site down.
+
+## Launching a Site From the Console
+
+  And, if you click one of the tabs at right for sites not already running, they start up and open in your browser.
+
+## Visiting a Running Site From the Console
+
+ If you double-click the tab for a site that is already running, a new browser window is opened to visit that site.
 
 ## Restarting a Site
 
-Currently: click the "x," then click the appropriate tab at right to launch the site again. We'll be adding a "refresh" icon.
+Just click the "↺" icon.
 
 ## About P'unk Avenue and Apostrophe
 
