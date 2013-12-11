@@ -1,7 +1,4 @@
+config.js
 npm-debug.log
 *.DS_Store
 node_modules
-# We do not commit CSS, only LESS
-public/css/*.css
-# For now
-docs

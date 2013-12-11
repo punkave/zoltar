@@ -66,13 +66,19 @@ You can see all the console output of each site. There is an "x" to shut each si
 
 Just click the "↺" icon.
 
+## Changing the Configuration
+
+See `config-example.js` for configurable parameters. Copy that file to `config.js` and it will take effect. If you change the proxy port you must also change it in `proxy.pac` and you may need to select that file again in your operating system's network control panel.
+
 ## About P'unk Avenue and Apostrophe
 
 `node-dev-proxy` was created at [P'unk Avenue](http://punkave.com) to support our work developing projects with Apostrophe, an open-source content management system built on node.js. `node-dev-proxy` isn't mandatory for Apostrophe and vice versa, but they play very well together. If you like `node-dev-proxy` you should definitely [check out the Apostrophe sandbox project](http://github.com/punkave/apostrophe-sandbox).
 
 ## Support
 
-Feel free to open issues on [github](http://github.com/punkave/node-dev-proxy). We welcome pull requests.
+First off: thanks to `proxy.pac` node-dev-proxy only looks at .dev sites and keeps its filthy mitts completely off the rest of your web traffic. So if a website is not working, don't blame node-dev-proxy. It wasn't even there, okay?
+
+Having said that... feel free to open issues on [github](http://github.com/punkave/node-dev-proxy). We welcome pull requests.
 
 <a href="http://punkave.com/"><img src="https://raw.github.com/punkave/node-dev-proxy/master/logos/logo-box-builtby.png" /></a>
 

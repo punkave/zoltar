@@ -1,10 +1,19 @@
-var httpPort = 5050;
+var fs = require('fs');
 
-var nextPort = 4000;
+var config = fs.existsSync(__dirname + '/config.js') ? require('./config.js') : {};
 
-var home = process.env.HOME;
-var sitesPath = home + '/node-sites';
+var proxyPort = config.proxyPort || 5050;
+
+var nextPort = config.firstAppPort || 4000;
+
+var sitesPath = config.sitesPath || '~/node-sites';
+
+sitesPath = sitesPath.replace(/~/g, process.env.HOME);
+
 var nextMessage = 1;
+
+// Uniquely identify this instance of the server
+var instance = Math.floor(Math.random() * 1000000000);
 
 var fs = require('fs');
 var glob = require('glob');
@@ -45,13 +54,14 @@ nunjucks.configure('views', {
 });
 
 monitor.get('/', function(req, res) {
-  return res.render('monitor.html');
+  return res.render('monitor.html', { instance: instance });
 });
 
 monitor.post('/update', function(req, res) {
   var response = {
     status: 'ok',
     sites: {},
+    instance: instance,
     last: nextMessage - 1
   };
   _.each(sites, function(site, name) {
@@ -126,10 +136,11 @@ function kill(site, callback) {
   }
 }
 
-console.log("Proxy ready. Be sure to install proxy.pac via\n" +
+console.log("\n\nProxy ready. Be sure to install proxy.pac via:\n" +
   "System Preferences -> Network -> Advanced ->\n" +
-  "Proxies -> Automatic Configuration\n\n");
-server.listen(httpPort);
+  "Proxies -> Automatic Configuration\n" +
+  "(Other operating systems and browsers can load .pac files too.)");
+server.listen(proxyPort);
 
 function dispatcher(req, res) {
   var parsed = url.parse(req.url);

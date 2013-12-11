@@ -1,0 +1,73 @@
+.monitor-tabs {
+  display: inline-block;
+}
+
+.monitor-tab {
+  border: 1px dotted black;
+  margin-right: 10px;
+  display: inline-block;
+  color: black;
+  border: 2px dotted gray;
+  border-bottom: none;
+  padding: 4px;
+  text-decoration: none;
+}
+
+.launchers {
+  display: inline-block;
+}
+
+.launcher {
+  border: 1px dotted gray;
+  margin-right: 10px;
+  display: inline-block;
+  color: gray;
+  border: 2px dotted #ddd;
+  border-bottom: none;
+  padding: 4px;
+  text-decoration: none;
+}
+
+.close {
+  font-style: italic;
+}
+
+.monitor-tab.current {
+  color: white;
+  background-color: black;
+}
+
+.monitor {
+  overflow: scroll;
+  height: 400px;
+  padding: 2px;
+  display: none;
+  color: white;
+  background-color: black;
+  border: 2px dotted gray;
+}
+
+.monitor.current {
+  display: block;
+}
+
+.monitor .stderr {
+  color: #fbb;
+}
+
+.monitor .system {
+  color: #bbf;
+}
+
+.monitor-launch {
+  display: inline-block;
+  margin-left: 40px;
+}
+
+.offline {
+  float: right;
+  background-color: #fdd;
+  color: black;
+  padding: 4px;
+  border: 2px dotted #f88;
+}

@@ -11,6 +11,7 @@
 {# 'top' wraps everything that isn't the monitors so that we can #}
 {# calculate a size for the monitors as needed in JavaScript #}
 <div data-top>
+  <div title="Maybe you should restart the proxy." class="offline" data-offline>Offline</div>
   <div class="monitor-tabs" data-monitor-tabs>
     <a class="monitor-tab" data-monitor-tab href="#"><span class="close" data-restart>↺</span> <span data-name>site</span> <span class="close" data-close>x</span></a>
   </div>
@@ -22,6 +23,7 @@
 <pre class="monitor" data-monitor></pre>
 </div>
 <script>
+var instance = {{ instance }};
 var $monitorTabs;
 var $monitors;
 var $monitorTabTemplate;
@@ -98,8 +100,8 @@ function resize() {
   $('[data-monitors] [data-monitor]').height($(window).height() - $('[data-top]').height() - 8);
 }
 
-// Simplest, stupidest way to update the monitor for now. Well not
-// *too* stupid...
+// Not using socket.io etc. yet because of issues with node-http-proxy.
+// We use a simple AJAX solution for now.
 //
 // TODO cope with socket.io's bugs when talking to node-http-proxy
 // and vice versa
@@ -110,6 +112,8 @@ var launchable = [];
 
 var since = 0;
 
+var last = (new Date()).getTime();
+
 function update() {
   var newLaunchable = [];
   $.post(
@@ -118,8 +122,15 @@ function update() {
       since: since
     },
     function(data) {
+      last = (new Date()).getTime();
       if (data.status !== 'ok') {
         alert(data.status);
+        return;
+      }
+      if (data.instance != instance) {
+        // node-dev-proxy was restarted. We need to refresh to accurately
+        // show what's happening in this new universe
+        window.location.reload();
         return;
       }
       $.each(data.sites, function(name, info) {
@@ -143,7 +154,17 @@ function update() {
       }
     },
     'json'
-  );
+  ).fail(function() {
+    $('[data-offline]').show();
+  });
+
+  var now = (new Date()).getTime();
+
+  if (now - last > 5000) {
+    $('[data-offline]').show();
+  } else {
+    $('[data-offline]').hide();
+  }
 }
 
 function append($el, output) {
