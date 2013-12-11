@@ -11,15 +11,15 @@
 {# 'top' wraps everything that isn't the monitors so that we can #}
 {# calculate a size for the monitors as needed in JavaScript #}
 <div data-top>
-  <div title="Maybe you should restart the proxy." class="offline" data-offline>Offline</div>
   <div class="monitor-tabs" data-monitor-tabs>
     <a class="monitor-tab" data-monitor-tab href="#"><span class="close" data-restart>↺</span> <span data-name>site</span> <span class="close" data-close>x</span></a>
   </div>
+  <div title="Maybe you should restart the proxy." class="offline" data-offline>Offline</div>
   <div class="launchers" data-launchers>
     <a class="launcher" data-launcher href="#">site</a>
   </div>
 </div>
-<div data-monitors>
+<div class="monitors" data-monitors>
 <pre class="monitor" data-monitor></pre>
 </div>
 <script>

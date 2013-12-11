@@ -65,9 +65,13 @@
 }
 
 .offline {
-  float: right;
+  display: inline-block;
   background-color: #fdd;
   color: black;
   padding: 4px;
   border: 2px dotted #f88;
+}
+
+.monitors {
+  clear: left;
 }
