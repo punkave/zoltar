@@ -5,5 +5,7 @@
 module.exports = {
   proxyPort: 5050,
   firstAppPort: 4000,
-  sitesPath: '~/node-sites'
+  sitesPath: '~/node-sites',
+  // You can change this to nodemon, etc.
+  nodeCommand: 'node'
 };

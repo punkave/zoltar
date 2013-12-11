@@ -10,6 +10,8 @@ var sitesPath = config.sitesPath || '~/node-sites';
 
 sitesPath = sitesPath.replace(/~/g, process.env.HOME);
 
+var nodeCommand = config.nodeCommand || 'node';
+
 var nextMessage = 1;
 
 // Uniquely identify this instance of the server
@@ -265,7 +267,7 @@ function launch(site, callback) {
   extend(true, env, process.env);
   env.PORT = site.port;
 
-  site.child = myspawn('node', [ sitesPath + '/' + site.name + '/app.js' ], {
+  site.child = myspawn(nodeCommand, [ sitesPath + '/' + site.name + '/app.js' ], {
     cwd: sitesPath + '/' + site.name,
     env: env
   });

@@ -70,6 +70,8 @@ Just click the "↺" icon.
 
 See `config-example.js` for configurable parameters. Copy that file to `config.js` and it will take effect. If you change the proxy port you must also change it in `proxy.pac` and you may need to select that file again in your operating system's network control panel.
 
+Note that you can change the `nodeCommand` parameter to start your apps via `nodemon` or `forever` instead of `node`.
+
 ## About P'unk Avenue and Apostrophe
 
 `node-dev-proxy` was created at [P'unk Avenue](http://punkave.com) to support our work developing projects with Apostrophe, an open-source content management system built on node.js. `node-dev-proxy` isn't mandatory for Apostrophe and vice versa, but they play very well together. If you like `node-dev-proxy` you should definitely [check out the Apostrophe sandbox project](http://github.com/punkave/apostrophe-sandbox).
