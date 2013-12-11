@@ -7,5 +7,8 @@ module.exports = {
   firstAppPort: 4000,
   sitesPath: '~/node-sites',
   // You can change this to nodemon, etc.
-  nodeCommand: 'node'
+  nodeCommand: 'node',
+  // If package.json specifies "main:" that is checked for first, otherwise
+  // try these filenames to launch the app
+  alternatives: [ 'app.js', 'server.js', 'index.js' ]
 };

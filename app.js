@@ -112,6 +112,7 @@ monitor.post('/restart', function(req, res) {
     }
   }, function(err) {
     if (err) {
+      console.error(err);
       return res.send({ status: err });
     } else {
       return res.send({ status: 'ok' });
@@ -250,24 +251,36 @@ function send(name, category, data) {
 
 function launch(site, callback) {
   site.port = nextPort++;
-  // http://stackoverflow.com/questions/7171725/open-new-terminal-tab-from-command-line-mac-os-x
-  // myexec(
-  //   'osascript -e \'tell app "Terminal"\n' +
-  //     'do script "(export PORT=' + sites[site].port + ' && ' +
-  //       'cd ' + sitesPath + '/' + site + ' && ' +
-  //       'node app.js)"\n' +
-  //   'end tell\'', function() {
-  //   // We really can't tell when the app itself dies this way.
-  //   // TODO: our own frontend to multiplex stdout/stderr from all the sites
-  //   // which would allow us to retain process control, replacing terminal
-  // });
 
   // Spawn the app
   var env = {};
   extend(true, env, process.env);
   env.PORT = site.port;
 
-  site.child = myspawn(nodeCommand, [ sitesPath + '/' + site.name + '/app.js' ], {
+  var alternatives = config.alternatives || [ 'app.js', 'server.js', 'index.js' ];
+
+  var pj = sitesPath + '/' + site.name + '/package.json';
+  if (fs.existsSync(pj)) {
+    try {
+      var info = JSON.parse(fs.readFileSync(pj));
+      if (info.main) {
+        alternatives.unshift(info.main);
+      }
+    } catch (e) {
+      // Not much use to us if it's invalid
+    }
+  }
+
+  var main = _.find(alternatives, function(alternative) {
+    if (fs.existsSync(sitesPath + '/' + site.name + '/' + alternative)) {
+      return alternative;
+    }
+  });
+
+  if (!main) {
+    return callback('none of these exist: ' + alternatives.join(', ') + ' specify main: in package.json if you want to use something else.');
+  }
+  site.child = myspawn(nodeCommand, [ sitesPath + '/' + site.name + '/' + main ], {
     cwd: sitesPath + '/' + site.name,
     env: env
   });
