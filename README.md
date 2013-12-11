@@ -18,10 +18,11 @@ First, move your node-powered sites to `~/node-sites`. Each one should have an `
 
 Etc. Don't put anything that isn't a node-powered website in this folder.
 
-Now pick up `node-dev-proxy` from github:
+Now pick up `node-dev-proxy` from github. `cd` to the folder and run `npm install`:
 
     git clone https://github.com/punkave/node-dev-proxy
     cd node-dev-proxy
+    npm install
 
 Now start the proxy:
 
