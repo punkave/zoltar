@@ -1,6 +1,6 @@
 {
   "name": "zoltar",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Zoltar sees all! Access your node sites by their project name with no port number; manage them with a friendly web-based console",
   "main": "index.js",
   "scripts": {
