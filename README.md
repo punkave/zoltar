@@ -1,3 +1,5 @@
+<img src="https://raw.github.com/punkave/zoltar/master/zoltar-crystalball.png" alt="Zoltar: A Launcher For Node-Powered Websites" />
+
 # zoltar
 
 <a href="http://apostrophenow.org/"><img src="https://raw.github.com/punkave/zoltar/master/logos/logo-box-madefor.png" align="right" /></a>
