@@ -1,16 +1,16 @@
-# node-dev-proxy
+# orb
 
-<a href="http://apostrophenow.org/"><img src="https://raw.github.com/punkave/node-dev-proxy/master/logos/logo-box-madefor.png" align="right" /></a>
+<a href="http://apostrophenow.org/"><img src="https://raw.github.com/punkave/orb/master/logos/logo-box-madefor.png" align="right" /></a>
 
-node-dev-proxy launches your node-powered sites on demand when you access them by their actual names. No more "node app", no more "http://localhost:3000".
+orb launches your node-powered sites on demand when you access them by their actual names. No more "node app", no more "http://localhost:3000".
 
-node-dev-proxy also provides a simple web-based console where you can see the output of all of your apps and easily shut them down, launch more, or visit their homepages.
+orb also provides a simple web-based console where you can see the output of all of your apps and easily shut them down, launch more, or visit their homepages.
 
-<img src="https://raw.github.com/punkave/node-dev-proxy/master/screenshot1.png" />
+<img src="https://raw.github.com/punkave/orb/master/screenshot1.png" />
 
-## Setting up node-dev-proxy
+## Setting up orb
 
-First, move your node-powered sites to `~/node-sites`. Each one should have an `app.js` file. The layout looks like this:
+First, move your node-powered sites to `~/node-sites` (or not, see "Changing the Configuration"). Each one should have an `app.js` file. The layout looks like this:
 
     ~/node-sites/site1/app.js
     ~/node-sites/site2/app.js
@@ -18,10 +18,12 @@ First, move your node-powered sites to `~/node-sites`. Each one should have an `
 
 Etc. Don't put anything that isn't a node-powered website in this folder.
 
-Now pick up `node-dev-proxy` from github. `cd` to the folder and run `npm install`:
+(`index.js` and `server.js` are also accepted, as well as anything specified as `main` in `package.json`.)
 
-    git clone https://github.com/punkave/node-dev-proxy
-    cd node-dev-proxy
+Now pick up `orb` from github. `cd` to the folder and run `npm install`:
+
+    git clone https://github.com/punkave/orb
+    cd orb
     npm install
 
 Now start the proxy:
@@ -35,7 +37,7 @@ Next, **configure your system to use the provided `proxy.pac` file for webserver
 * Click "Advanced"
 * Click "Proxies"
 * Click the "Browse" button for "Automatic Proxy Configuration"
-* Pick the `proxy.pac` file that came with `node-dev-proxy`
+* Pick the `proxy.pac` file that came with `orb`
 
 ## Launching Your Sites
 
@@ -75,15 +77,15 @@ Note that you can change the `nodeCommand` parameter to start your apps via `nod
 
 ## About P'unk Avenue and Apostrophe
 
-`node-dev-proxy` was created at [P'unk Avenue](http://punkave.com) to support our work developing projects with Apostrophe, an open-source content management system built on node.js. `node-dev-proxy` isn't mandatory for Apostrophe and vice versa, but they play very well together. If you like `node-dev-proxy` you should definitely [check out the Apostrophe sandbox project](http://github.com/punkave/apostrophe-sandbox).
+`orb` was created at [P'unk Avenue](http://punkave.com) to support our work developing projects with Apostrophe, an open-source content management system built on node.js. `orb` isn't mandatory for Apostrophe and vice versa, but they play very well together. If you like `orb` you should definitely [check out the Apostrophe sandbox project](http://github.com/punkave/apostrophe-sandbox).
 
 ## Support
 
-First off: thanks to `proxy.pac` node-dev-proxy only looks at .dev sites and keeps its filthy mitts completely off the rest of your web traffic. So if a website is not working, don't blame node-dev-proxy. It wasn't even there, okay?
+First off: thanks to `proxy.pac` orb only looks at .dev sites and keeps its filthy mitts completely off the rest of your web traffic. So if a website is not working, don't blame orb. It wasn't even there, okay?
 
-Having said that... feel free to open issues on [github](http://github.com/punkave/node-dev-proxy). We welcome pull requests.
+Having said that... feel free to open issues on [github](http://github.com/punkave/orb). We welcome pull requests.
 
-<a href="http://punkave.com/"><img src="https://raw.github.com/punkave/node-dev-proxy/master/logos/logo-box-builtby.png" /></a>
+<a href="http://punkave.com/"><img src="https://raw.github.com/punkave/orb/master/logos/logo-box-builtby.png" /></a>
 
 
 

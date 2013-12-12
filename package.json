@@ -1,5 +1,5 @@
 {
-  "name": "node-dev-proxy",
+  "name": "orb",
   "version": "0.1.0",
   "description": "Access your node sites by their project name with no port number; automatically launch them in terminal windows on your Mac when accessed",
   "main": "index.js",

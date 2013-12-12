@@ -195,7 +195,7 @@ function serveProxy(name, req, res)
   }, function(err) {
     if (err) {
       res.writeHead(500, {'Content-Type': 'text/plain'});
-      return res.end('Oh dear, node-dev-proxy is having some trouble.');
+      return res.end('Oh dear, orb is cloudy.');
     }
   });
 }
