@@ -42,7 +42,7 @@ That will listen on port 3000 if `PORT` is not set.
 
     node app
 
-5. Next, **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
+5. **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
 
 * Go to System Preferences
 * Open "Network"
