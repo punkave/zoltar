@@ -34,13 +34,13 @@ zoltar also provides a simple web-based console where you can see the output of 
 
 3. Pick up `zoltar` from github. `cd` to the folder and run `npm install`:
 
-    git clone https://github.com/punkave/zoltar
-    cd zoltar
-    npm install
+        git clone https://github.com/punkave/zoltar
+        cd zoltar
+        npm install
 
 4. Now start the proxy:
 
-    node app
+        node app
 
 5. **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
  
