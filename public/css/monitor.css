@@ -1,50 +1,92 @@
+body
+{
+  font-family: Menlo, Courier, monospace;
+  background-color: black;
+}
+
+.tab-container
+{
+  padding: 4px 4px 0 4px;
+  background-color: #545454;
+}
+
 .monitor-tabs {
   display: inline-block;
 }
 
-.monitor-tab {
-  border: 1px dotted black;
-  margin-right: 10px;
+.monitor-tab, .launcher {
+  /*border: 1px dotted black;*/
+  background-color: #909090;
+  margin-right: 4px;
   display: inline-block;
   color: black;
-  border: 2px dotted gray;
   border-bottom: none;
-  padding: 4px;
   text-decoration: none;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 }
 
-.launchers {
+.monitor-tab.current
+{
+  background-color: #b4b4b4;
+}
+
+.monitor-tab span, .launcher
+{
+  display: inline-block;
+  padding: 4px 6px;
+}
+
+.monitor-tab .close
+{
+  transition: background-color 0.1s;
+  border-radius: 2px;
+}
+
+.monitor-tab .close:hover
+{
+  background-color: #808080;
+  /*background-color: white;*/
+}
+
+.monitor-tab.current .close:hover
+{
+  background-color: #a4a4a4;
+}
+
+.monitor-tab:last-child
+{
+  margin-right: 1em;
+}
+
+.launchers
+{
   display: inline-block;
 }
 
-.launcher {
-  border: 1px dotted gray;
-  margin-right: 10px;
-  display: inline-block;
-  color: gray;
-  border: 2px dotted #ddd;
-  border-bottom: none;
-  padding: 4px;
-  text-decoration: none;
+.launcher
+{
+  opacity: 0.4;
+  transition: opacity 0.1s;
 }
 
-.close {
-  font-style: italic;
+.launcher:hover
+{
+  opacity: 1;
 }
 
-.monitor-tab.current {
-  color: white;
+.monitors {
   background-color: black;
+  padding: 1em;
+  clear: left;
 }
 
 .monitor {
   overflow: scroll;
   height: 400px;
-  padding: 2px;
   display: none;
   color: white;
   background-color: black;
-  border: 2px dotted gray;
 }
 
 .monitor.current {
@@ -65,13 +107,8 @@
 }
 
 .offline {
-  display: inline-block;
-  background-color: #fdd;
-  color: black;
-  padding: 4px;
-  border: 2px dotted #f88;
-}
-
-.monitors {
-  clear: left;
+  display: block;
+  background-color: #545454;
+  color: #ff7a64;
+  padding: 10px;
 }

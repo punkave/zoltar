@@ -8,7 +8,7 @@ zoltar launches your node-powered sites on demand when you access them by their 
 
 zoltar also provides a simple web-based console where you can see the output of all of your apps and easily shut them down, launch more, or visit their homepages.
 
-<img src="https://raw.github.com/punkave/zoltar/master/screenshot1.png" />
+<img src="https://raw.github.com/punkave/zoltar/master/zoltar_screenshot.png" />
 
 ## Setting up zoltar
 

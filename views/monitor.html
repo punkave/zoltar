@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8">
-  <title>Running Node Sites</title>
+  <title>Zoltar</title>
   <link rel="stylesheet" type="text/css" href="/css/reset.css">
   <link rel="stylesheet" type="text/css" href="/css/sensible.css">
   <link rel="stylesheet" type="text/css" href="/css/monitor.css">
@@ -10,12 +10,12 @@
 <body>
 {# 'top' wraps everything that isn't the monitors so that we can #}
 {# calculate a size for the monitors as needed in JavaScript #}
-<div data-top>
+<div title="Maybe you should restart Zoltar." class="offline" data-offline>Zoltar is offline.</div>
+<div data-top class="tab-container">
   <div class="monitor-tabs" data-monitor-tabs>
-    <a class="monitor-tab" data-monitor-tab href="#"><span class="close" data-restart>↺</span> <span data-name>site</span> <span class="close" data-close>x</span></a>
-  </div>
-  <div title="Maybe you should restart the proxy." class="offline" data-offline>Offline</div>
-  <div class="launchers" data-launchers>
+    <a class="monitor-tab" data-monitor-tab href="#"><span class="close" data-restart>↺</span><span data-name>site</span><span class="close" data-close>&times;</span></a>
+  </div><!--
+--><div class="launchers" data-launchers>
     <a class="launcher" data-launcher href="#">site</a>
   </div>
 </div>
@@ -97,7 +97,7 @@ $(function() {
 });
 
 function resize() {
-  $('[data-monitors] [data-monitor]').height($(window).height() - $('[data-top]').height() - 8);
+  $('[data-monitors] [data-monitor]').height($(window).height() - $('[data-top]').height() - 36);
 }
 
 // Not using socket.io etc. yet because of issues with node-http-proxy.
