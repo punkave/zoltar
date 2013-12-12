@@ -12,7 +12,7 @@ zoltar also provides a simple web-based console where you can see the output of 
 
 ## Setting up zoltar
 
-First, move your node-powered sites to `~/node-sites` (or not, see "Changing the Configuration"). Each one should have an `app.js` file. The layout looks like this:
+1. Move your node-powered sites to `~/node-sites` (or not, see "Changing the Configuration"). Each one should have an `app.js` file. The layout looks like this:
 
     ~/node-sites/site1/app.js
     ~/node-sites/site2/app.js
@@ -22,24 +22,34 @@ Etc. Don't put anything that isn't a node-powered website in this folder.
 
 (`index.js` and `server.js` are also accepted, as well as anything specified as `main` in `package.json`.)
 
-Now pick up `zoltar` from github. `cd` to the folder and run `npm install`:
+2. Your apps must respect the `PORT` environment variable and listen on that port. (If you have ever developed for Heroku you may already be doing this. Some high-level libraries, like `appy` and `apostrophe-site`, do it out of the box.)
+
+This works:
+
+```js
+app.listen(process.env.PORT || 3000);
+```
+
+That will listen on port 3000 if `PORT` is not set.
+
+3. Pick up `zoltar` from github. `cd` to the folder and run `npm install`:
 
     git clone https://github.com/punkave/zoltar
     cd zoltar
     npm install
 
-Now start the proxy:
+4. Now start the proxy:
 
     node app
 
-Next, **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
+5. Next, **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
 
 * Go to System Preferences
 * Open "Network"
 * Click "Advanced"
 * Click "Proxies"
-* Click the "Browse" button for "Automatic Proxy Configuration"
-* Pick the `proxy.pac` file that came with `zoltar`
+* Check the "Automatic Proxy Configuration" box
+* In the "URL" field, paste this URL and edit it to suit where you downloaded zoltar: `file://localhost/Users/boutell/src/zoltar/proxy.pac`
 
 ## Launching Your Sites
 
