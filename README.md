@@ -1,4 +1,4 @@
-<a href="#"><img src="https://raw.github.com/punkave/zoltar/master/zoltar-crystalball.png" alt="Zoltar: A Launcher For Node-Powered Websites" /></a>
+<a href="#zoltar"><img src="https://raw.github.com/punkave/zoltar/master/zoltar-crystalball.png" alt="Zoltar: A Launcher For Node-Powered Websites" /></a>
 
 # zoltar
 
