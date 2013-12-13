@@ -195,7 +195,7 @@ function serveProxy(name, req, res)
   }, function(err) {
     if (err) {
       res.writeHead(500, {'Content-Type': 'text/plain'});
-      return res.end('Zoltar\'s vision is cloudy.');
+      return res.end('An error occurred. See monitor.dev for details.');
     }
   });
 }
@@ -296,7 +296,6 @@ function launch(site, callback) {
   site.child.on('close', function(code) {
     delete site.child;
     delete site.port;
-    site.output = [];
   });
 
   // Wait until we can successfully connect to the app
@@ -315,9 +314,14 @@ function launch(site, callback) {
     socket.on('error', function(e) {
       tries++;
       socket.end();
+      if (!site.child) {
+        // Process died before we could connect to it
+        send(site.name, 'system', '* * * PROCESS EXITED WITH NO CONNECTION * * *');
+        return callback('failed');
+      }
       if (tries === 30) {
-        console.log('unable to connect to ' + site.name + ' on port ' + site.port + 'after 30 tries:');
-        console.log(e);
+        send(site.name, 'system', '* * * UNABLE TO CONNECT TO ' + site.name + ' AFTER 30 TRIES * * *');
+        send(site.name, 'system', 'Did you remember to check the PORT environment variable ' + 'when deciding what port to listen to in your app?');
         return callback('failed');
       }
       return setTimeout(callback, 250);

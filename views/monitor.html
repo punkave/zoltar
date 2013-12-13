@@ -64,8 +64,6 @@ $(function() {
     $.post('/kill', { name: name }, function(data) {
       if (data.status === 'ok') {
         $('[data-monitor="' + name + '"]').remove();
-      } else {
-        alert(data.status);
       }
     });
     return false;
@@ -76,8 +74,7 @@ $(function() {
     $.post('/restart', { name: name }, function(data) {
       if (data.status === 'ok') {
         // It'll be obvious in a moment that this worked
-      } else {
-        alert(data.status);
+        // Otherwise the monitor will show the error
       }
     });
     return false;
@@ -123,10 +120,6 @@ function update() {
     },
     function(data) {
       last = (new Date()).getTime();
-      if (data.status !== 'ok') {
-        alert(data.status);
-        return;
-      }
       if (data.instance != instance) {
         // node-dev-proxy was restarted. We need to refresh to accurately
         // show what's happening in this new universe
