@@ -257,7 +257,7 @@ function launch(site, callback) {
   extend(true, env, process.env);
   env.PORT = site.port;
 
-  var alternatives = config.alternatives || [ 'app.js', 'server.js', 'index.js' ];
+  var alternatives = config.alternatives || [ 'start-dev', 'app.js', 'server.js', 'index.js' ];
 
   var pj = sitesPath + '/' + site.name + '/package.json';
   if (fs.existsSync(pj)) {
@@ -280,7 +280,11 @@ function launch(site, callback) {
   if (!main) {
     return callback('none of these exist: ' + alternatives.join(', ') + ' specify main: in package.json if you want to use something else.');
   }
-  site.child = myspawn(nodeCommand, [ sitesPath + '/' + site.name + '/' + main ], {
+  var viaNode = main.match(/\.js$/);
+  var fullPath = sitesPath + '/' + site.name + '/' + main;
+  var cmd = viaNode ? nodeCommand : fullPath;
+  var args = viaNode ? [ fullPath ] : [];
+  site.child = myspawn(cmd, args, {
     cwd: sitesPath + '/' + site.name,
     env: env
   });
