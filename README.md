@@ -18,13 +18,13 @@ zoltar also provides a simple web-based console where you can see the output of 
     ~/node-sites/site2/app.js
     ~/node-sites/site3/app.js
  
-Etc. Don't put anything that isn't a node-powered website in this folder.
+ Etc. Don't put anything that isn't a node-powered website in this folder.
  
-`index.js` and `server.js` are also accepted, as well as anything specified as `main` in `package.json`.
+ `index.js` and `server.js` are also accepted, as well as anything specified as `main` in `package.json`.
 
-If you want a custom startup just for Zoltar, you can have that too. Just provide a bash script called `start-dev` and make sure it's executable, and Zoltar will run that instead.
+ If you want a custom startup just for Zoltar, you can have that too. Just provide a bash script called `start-dev` and make sure it's executable, and Zoltar will run that instead.
 
-For instance, you might choose to make sure Express runs in debug mode with a `start-dev` file like this:
+ For instance, you might choose to make sure Express runs in debug mode with a `start-dev` file like this:
 
 ```bash
 #!/bin/bash
@@ -33,7 +33,7 @@ For instance, you might choose to make sure Express runs in debug mode with a `s
 DEBUG=express:* node app
 ```
 
-Again, make sure you `chmod 700 start-dev` so that the script is executable.
+ Again, make sure you `chmod 700 start-dev` so that the script is executable.
 
 2. Your apps must respect the `PORT` environment variable and listen on that port. (If you have ever developed for Heroku you may already be doing this. Some high-level libraries, like `appy` and `apostrophe-site`, do it out of the box.)
  
