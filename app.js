@@ -153,14 +153,27 @@ if(os.platform() === 'darwin') {
       usedHardwarePort = 'Wi-Fi';
     }
 
+    var zoltarPacUrl = 'file://localhost' + __dirname + '/proxy.pac';
+
     exec("networksetup -getautoproxyurl " + usedHardwarePort, function (error, stdout, stderr) {
       if(stdout.match(/enabled:\s+no/i)){
         console.log('\n\nzoltar is now going to attempt to configure proxy.pac automatically. You may be prompted for your password.')
-        exec('networksetup -setautoproxyurl ' + usedHardwarePort + ' "file://localhost' + __dirname + '/proxy.pac"', function (error, stdout, stderr) {
+        exec('networksetup -setautoproxyurl ' + usedHardwarePort + ' "' + zoltarPacUrl + '"', function (error, stdout, stderr) {
           console.log("\nProxy ready.");
         });
       } else if(stdout.match(/enabled:\s+yes/i)){
-        console.log("\nProxy ready.");
+        var existingPacUrl = stdout.match(/URL:\s+(.*?)\n/i)[1];
+
+        if(existingPacUrl === zoltarPacUrl){
+          console.log("\nProxy ready.");
+        } else {
+          console.log("\nIt seems like you're already using a *.pac file in your proxy settings.\n" +
+            "You can either merge the currently used *.pac file with zoltar's proxy.pac,\n" +
+            "or replace it by going to: \n" +
+            "System Preferences -> Network -> Advanced ->\n" +
+            "Proxies -> Automatic Configuration\n" +
+            "\nProxy ready.");
+        }
       }
     });
   });
