@@ -28,6 +28,9 @@ var nunjucks = require('nunjucks');
 var extend = require('extend');
 var express = require('express');
 var net = require('net');
+var sys = require('sys');
+var exec = require('child_process').exec;
+var os = require('os');
 
 nunjucks.configure('views', { autoescape: true });
 
@@ -139,10 +142,45 @@ function kill(site, callback) {
   }
 }
 
-console.log("\n\nProxy ready. Be sure to install proxy.pac via:\n" +
-  "System Preferences -> Network -> Advanced ->\n" +
-  "Proxies -> Automatic Configuration\n" +
-  "(Other operating systems and browsers can load .pac files too.)");
+// The code below sets up proxy.pac automatically for OSX
+if(os.platform() === 'darwin') {
+  // We're gonna check if we're running a Wi-Fi connection right now
+  exec("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I", function (error, stdout, stderr) {
+    if (error !== null) return; // In case of error we panic and run away from here
+    var usedHardwarePort = 'Ethernet';
+
+    if(stdout.match(/state:\s+running/i)){
+      usedHardwarePort = 'Wi-Fi';
+    }
+
+    var zoltarPacUrl = 'file://localhost' + __dirname + '/proxy.pac';
+
+    exec("networksetup -getautoproxyurl " + usedHardwarePort, function (error, stdout, stderr) {
+      if(stdout.match(/enabled:\s+no/i)){
+        console.log('\n\nzoltar is now going to attempt to configure proxy.pac automatically. You may be prompted for your password.')
+        exec('networksetup -setautoproxyurl ' + usedHardwarePort + ' "' + zoltarPacUrl + '"', function (error, stdout, stderr) {
+          console.log("\nProxy ready.");
+        });
+      } else if(stdout.match(/enabled:\s+yes/i)){
+        var existingPacUrl = stdout.match(/URL:\s+(.*?)\n/i)[1];
+
+        if(existingPacUrl === zoltarPacUrl){
+          console.log("\nProxy ready.");
+        } else {
+          console.log("\nIt seems like you're already using a *.pac file in your proxy settings.\n" +
+            "You can either merge the currently used *.pac file with zoltar's proxy.pac,\n" +
+            "or replace it by going to: \n" +
+            "System Preferences -> Network -> Advanced ->\n" +
+            "Proxies -> Automatic Configuration\n" +
+            "\nProxy ready.");
+        }
+      }
+    });
+  });
+} else {
+  console.log("\n\nProxy ready. Be sure to install proxy.pac");
+}
+
 server.listen(proxyPort);
 
 function dispatcher(req, res) {
