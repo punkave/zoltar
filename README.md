@@ -55,14 +55,7 @@ zoltar also provides a simple web-based console where you can see the output of 
 
         node app
 
-5. **configure your system to use the provided `proxy.pac` file for webserver proxy configuration.** All the major web browsers provide a way to do this, so this works across Windows, Linux and Mac. On a Mac you can just do it system-wide:
- 
- * Go to System Preferences
- * Open "Network"
- * Click "Advanced"
- * Click "Proxies"
- * Check the "Automatic Proxy Configuration" box
- * In the "URL" field, paste this URL and edit it to suit where you downloaded zoltar: `file://localhost/Users/boutell/src/zoltar/proxy.pac`
+5. **On Macs, proxy configuration should now be automatic. If not on a Mac, or if you want custom configuration, adjust your browser's proxy server configuration to use the provided proxy.pac file.**
 
 ## Launching Your Sites
 
@@ -103,6 +96,8 @@ Note that you can change the `nodeCommand` parameter to start your apps via `nod
 ## About P'unk Avenue and Apostrophe
 
 `zoltar` was created at [P'unk Avenue](http://punkave.com) to support our work developing projects with Apostrophe, an open-source content management system built on node.js. `zoltar` isn't mandatory for Apostrophe and vice versa, but they play very well together. If you like `zoltar` you should definitely [check out the Apostrophe sandbox project](http://github.com/punkave/apostrophe-sandbox).
+
+Thanks to Danny Povolotski for contributing support for automatic proxy configuration on Macs.
 
 ## Support
 
